@@ -33,3 +33,23 @@
 * `kubectl scale rs {sample.replicaset.yaml} --replicas 5`
 * 基本的にはyamlを書き換えることを推奨。後者はファイルと環境が一致しなくなる可能性がある
 
+## Deployment
+Rolling UpdateやRollbackを実現するリソース。
+* 新しいreplica setを一つ作ったら古いreplica setを一つ減らす
+* rollback方法は、 `kubectl rollout history deployment {deployment_name} --revision 1`
+* などで確認をしたうち、
+* `kubectl rollout undo deployemnt {deployment_name} --to-revision {revision_num}`
+* 一時停止時には `kubectl rollout pause deployment {deployment_name}`
+* 解除方法は `kubectl rollout resume deployment {deployment_name}`
+* 一時停止時にはdeploymentの即時反映はできない
+
+### Deploymentのアップデート戦略
+* Recrate
+  * すべてのPodを削除してからサイドPodを作成する
+  * 余剰のリソースを使わない、切り替えが早い
+  * `spec.strategy.type` に `Recreate` を設定
+* Rolling Update
+  * podを一つ一つ置き換えを行う
+  * `spec.strategy.type` に `RollingUpdate` または未設定
+  * `spec.strategy.rollingUpdate.maxUnavaiable` と `spec.strategy.rollingUpdate.maxSurge` をよしなに設定
+
