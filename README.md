@@ -105,3 +105,24 @@
 * `./whole-system` 下にすべてのファイルをおく
 * `./whole-system/subsystem-{name}` 下に関係のあるファイルをおく
 * `./microservice-{name}` 下に関係のあるファイルをおく
+
+### アノテーションとラベル
+* アノテーション
+  * マニフェストファイルのmetadataにannotationsをkey-value形式で置くことができる
+  * データの保存用、全ての環境では利用できない設定、正式に組み込まれる前の機能の設定
+* ラベル
+  * 利用者から識別できるように設定するメタデータ
+  * `kubeclt get pods -l {label}` のように検索できる
+
+
+### Pruneによるリソースの削除
+* 通常 `kubectl delete -f`で削除することは、入力ミスが発生しやすいので行わない
+* `kubectl apply --prune` を実施する
+
+### エディタによる編集
+* `export EDITOR=vim`
+* `kubectl edit pod {pod_name}`
+
+### setによるリソースの更新
+* env, image, resource, selector, serviceaccount, subjectにおいてコマンドで設定変更が可能
+* ただし、基本的にはファイルと実際の設定が変化するので、使うべきではない
