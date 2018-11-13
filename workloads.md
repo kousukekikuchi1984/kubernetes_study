@@ -86,5 +86,30 @@ Rolling UpdateやRollbackを実現するリソース。
 * 両方とも削除をする必要がある。
 * persistent volumeはそのボリュームが残っていれば、問題なくデータを引き出せる
 
+## Job
+* コンテナを利用して一度周りの処理を実行させるリソース
+* N並列で実行しながら、指定した回数のコンテナの実行を保証するリソース
+* 長時間の実行が前提となる `rsync` や S3にアップロードとかに用いる
+
+### Jobの作成
+* `kind` に `Job`を設定
+* `spec` に `comletions`, `parallelism`, `backoffLimit` を設定
+* `spec.template.spec.restartPolicy` が若干めんどい
+
+### Restart Policy
+* Never
+  * Pod障害時には新規のPodが作成される
+* OnFailure
+  * Job失敗時には同一のPodを利用してJobを再開する
 
 
+### 並列
+* `spec.paralellism` を2以上にするだけだが、タスクやワークキューを設定できる
+* 1回だけ実行
+  * completions: 1, parallelism 1, backoffLimit 1
+* N並列で実行させるタスク
+  * completions: M, parallelism N, backoffLimit N
+* 1こづつ実行するワークキュー
+  * completions: 未指定, parallelism: 1, backoffLimit: N
+* N並列で実行するワークキュー
+  * completions: 未指定, parallelism: N, backoffLimit: N
