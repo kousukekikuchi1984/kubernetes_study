@@ -53,3 +53,38 @@ Rolling UpdateやRollbackを実現するリソース。
   * `spec.strategy.type` に `RollingUpdate` または未設定
   * `spec.strategy.rollingUpdate.maxUnavaiable` と `spec.strategy.rollingUpdate.maxSurge` をよしなに設定
 
+## DaemonSet
+* 各Podを各ノードに一つは配置する方法
+* nodeSelectorやNode Anti-Affinityで除外することも可能
+* UseCaseはログ収集やノードのモニタリングなど
+
+### 作成
+* `kind` に `DaemonSet` を設定
+
+### アップデート
+* `spec.updateStrategy.type` に `OnDelete` を設定
+  * この場合はPodが停止した際にアップデートを行う
+  * 緊急時には意識的にpodをkillする必要がある（セルフヒーリングで自動的に上がる）
+* `spec.updateStrategy.type` に `RollingUpdate` を設定
+  * rolling update
+
+## Stateful Set
+* ReplicaSetの特殊な形。データ永続化のための仕組みを有している
+* 結構各部分が多い。 `kind` に `StatefulSet` を指定
+* `volumeClaimTemplates` を明記
+* `spec.podManagementPolicy` に `Parallel` or `OrderedReady` に設定できる
+
+### scaling
+* `replicas` の数字を変えるだけだが、減る場合は注意が必要。
+* インデックスが大きいものから削除されていく
+
+### Update
+* `OnDelete` と `RollingUpdate`
+* `spec.updateStrategy.rollingUpdate.partition` はアップデートしないもの
+
+### StatefulSetの削除とPersistentVolumeの削除
+* 両方とも削除をする必要がある。
+* persistent volumeはそのボリュームが残っていれば、問題なくデータを引き出せる
+
+
+
