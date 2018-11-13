@@ -113,3 +113,8 @@ Rolling UpdateやRollbackを実現するリソース。
   * completions: 未指定, parallelism: 1, backoffLimit: N
 * N並列で実行するワークキュー
   * completions: 未指定, parallelism: N, backoffLimit: N
+
+## CronJob
+* Cronが指定された時間のみにJobを生成する場合
+* `kind` に `CronJob`, `spec.schedule` に crontabの指定のスケジュール
+* 同時実行も可能。設定としては、`spec.concurrencyPolicy` に `Allow`, `Forbid`, `Replace` を指定
