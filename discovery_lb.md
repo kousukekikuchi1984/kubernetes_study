@@ -48,3 +48,17 @@
 * firewallの設定は `spec.loadBalancerSourceRange` でIPアドレスを指定する
 * 上記以外にはNetworkPolicy Resourceで不要なアクセスを削除する方が良い。
 
+## Headless Service
+* 対象の個々のPodのIPアドレスが帰ってくるサービス
+* `spec.type=ClusterIP`, `spec.clusterIP=None`, `metadata.name` が StatefulSetのそれと同じ
+
+## ExternalName Service
+* DNSを外部に参照しに行く仕組み
+* 別の名前を設定したい場合、クラスタ内からのエンドポイントを切り替えやすくしたい場合
+
+## None-Selector Service
+* よくわからん。多分不要
+
+## Ingress
+* 通常のLoadBalancerがL4であるのに対して、IngressはL7
+* なんのために必要かはよくわからん
